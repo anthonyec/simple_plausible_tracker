@@ -14,11 +14,18 @@ export default function createStats(
   };
 
   if (!domain) {
-    return console.warn('Domain required to setup stats');
+    console.warn('Domain required to setup stats');
   }
 
   return {
     async fire(eventName) {
+      if (!domain) {
+        const error = new Error('Domain required in setup to fire stat');
+
+        options.onFireError(error);
+        return console.warn(error.message);
+      }
+
       if (!eventName) {
         const error = new Error('`eventName` is required to fire stat');
 
